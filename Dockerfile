@@ -10,6 +10,8 @@ ARG USER_ID=""
 ARG GROUP_ID=""
 # SSH public key
 ARG USER_SSH_PUBKEY=""
+# Specify GID of "vglusers" group if exists, else leave this empty
+ARG VGLUSERS_GROUP_ID=""
 
 ### Software configs
 ARG RELION_VERSION="3.0.5"
@@ -52,6 +54,14 @@ RUN groupadd -g ${GROUP_ID} ${USER_NAME} && \
     echo '%wheel ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && \
     echo 'Defaults:%wheel !requiretty' >> /etc/sudoers
 
+<<<<<<< HEAD
+=======
+# Set vglusers if needed
+RUN if [ "${VGLUSERS_GROUP_ID}" != "" ];then \
+        groupadd -g ${VGLUSERS_GROUP_ID} vglusers && \
+        usermod -aG vglusers ${USER_NAME}; fi
+
+>>>>>>> devel
 # User configuration
 USER ${USER_NAME}
 WORKDIR /home/${USER_NAME}
