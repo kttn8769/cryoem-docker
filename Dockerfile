@@ -1,9 +1,11 @@
-### Base image: DockerHub nvidia/cuda, CUDA v9.2, cuDNN v7, development package, CentOS7 
+### Base image: DockerHub nvidia/cuda, CUDA v9.2, cuDNN v7, development package, CentOS7
 FROM nvidia/cuda:9.2-cudnn7-devel-centos7
 
 ### User account in Docker image
 # username
 ARG USER_NAME=""
+# groupname
+ARG GROUP_NAME=""
 # UID
 ARG USER_ID=""
 # GID
@@ -14,7 +16,7 @@ ARG USER_SSH_PUBKEY=""
 ARG VGLUSERS_GROUP_ID=""
 
 ### Software configs
-ARG RELION_VERSION="3.0.5"
+ARG RELION_VERSION="ver3.1"
 ARG RELION_BUILD_NUM_THREADS="12"
 ARG GCTF_BIN_URL="https://www.mrc-lmb.cam.ac.uk/kzhang/Gctf/Gctf_v1.18_b2/bin/Gctf_v1.18_b2_sm61_cu9.2"
 ARG GCTF_LIB_URL="https://www.mrc-lmb.cam.ac.uk/kzhang/Gctf/Gctf_v1.18_b2/lib/libEMcore_sm61_cu9.2.so"
@@ -49,8 +51,8 @@ RUN sed -i "s/^.*PasswordAuthentication.*$/PasswordAuthentication no/" /etc/ssh/
     ssh-keygen -A
 
 # Add user
-RUN groupadd -g ${GROUP_ID} ${USER_NAME} && \
-    useradd -u ${USER_ID} -g ${GROUP_ID} -m -G wheel ${USER_NAME} && \
+RUN groupadd -g ${GROUP_ID} ${GROUP_NAME} && \
+    useradd -u ${USER_ID} -g ${GROUP_ID} -m -G wheel ${GROUP_NAME} && \
     echo '%wheel ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && \
     echo 'Defaults:%wheel !requiretty' >> /etc/sudoers
 
