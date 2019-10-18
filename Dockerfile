@@ -52,7 +52,7 @@ RUN sed -i "s/^.*PasswordAuthentication.*$/PasswordAuthentication no/" /etc/ssh/
 
 # Add user
 RUN groupadd -g ${GROUP_ID} ${GROUP_NAME} && \
-    useradd -u ${USER_ID} -g ${GROUP_ID} -m -G wheel ${GROUP_NAME} && \
+    useradd -u ${USER_ID} -g ${GROUP_ID} -m -G wheel ${USER_NAME} && \
     echo '%wheel ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && \
     echo 'Defaults:%wheel !requiretty' >> /etc/sudoers
 
