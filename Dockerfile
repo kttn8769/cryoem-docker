@@ -42,7 +42,8 @@ RUN yum groupinstall "Development tools" -y && \
             sudo \
             wget \
             xauth \
-            vim
+            vim \
+            libjpeg-turbo-devel
 
 # SSH configuration
 RUN sed -i "s/^.*PasswordAuthentication.*$/PasswordAuthentication no/" /etc/ssh/sshd_config && \
