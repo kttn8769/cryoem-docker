@@ -43,7 +43,9 @@ RUN yum update -y && \
             wget \
             xauth \
             vim \
-            libjpeg-turbo-devel
+            libjpeg-turbo-devel \
+            mesa-libGL-devel \
+            mesa-libGLU-devel
 
 # SSH configuration
 RUN sed -i "s/^.*PasswordAuthentication.*$/PasswordAuthentication no/" /etc/ssh/sshd_config && \
