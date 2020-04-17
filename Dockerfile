@@ -23,7 +23,8 @@ ARG GCTF_LIB_URL="https://www.mrc-lmb.cam.ac.uk/kzhang/Gctf/Gctf_v1.18_b2/lib/li
 ###############################################################################
 
 # Install tools and dependencies
-RUN yum groupinstall "Development tools" -y && \
+RUN yum update -y && \
+    yum groupinstall "Development tools" -y && \
     yum install -y \
             cmake \
             openmpi-devel \
