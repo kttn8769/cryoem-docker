@@ -17,7 +17,6 @@ ARG VGLUSERS_GROUP_ID=""
 
 ### Software configs
 ARG RELION_VERSION="ver3.1"
-ARG RELION_BUILD_NUM_THREADS="12"
 ARG GCTF_BIN_URL="https://www.mrc-lmb.cam.ac.uk/kzhang/Gctf/Gctf_v1.18_b2/bin/Gctf_v1.18_b2_sm61_cu9.2"
 ARG GCTF_LIB_URL="https://www.mrc-lmb.cam.ac.uk/kzhang/Gctf/Gctf_v1.18_b2/lib/libEMcore_sm61_cu9.2.so"
 
@@ -80,7 +79,7 @@ RUN mkdir softwares && cd softwares && \
     git checkout $RELION_VERSION && \
     mkdir build && cd build && \
     cmake -DCMAKE_INSTALL_PREFIX=../install .. && \
-    make -j ${BUILD_NUM_THREADS} && make install && \
+    make -j && make install && \
     echo 'export PATH=${HOME}/softwares/relion/install/bin:$PATH' >> /home/${USER_NAME}/.bashrc
 
 # Gctf install
