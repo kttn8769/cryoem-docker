@@ -16,9 +16,14 @@ ARG USER_SSH_PUBKEY=""
 ARG VGLUSERS_GROUP_ID=""
 
 ### Software configs
+# RELION
 ARG RELION_VERSION="ver3.1"
+# GCTF
 ARG GCTF_BIN_URL="https://www.mrc-lmb.cam.ac.uk/kzhang/Gctf/Gctf_v1.18_b2/bin/Gctf_v1.18_b2_sm61_cu9.2"
 ARG GCTF_LIB_URL="https://www.mrc-lmb.cam.ac.uk/kzhang/Gctf/Gctf_v1.18_b2/lib/libEMcore_sm61_cu9.2.so"
+# EMAN2
+ARG EMAN2_MINICONDA="Miniconda3-4.6.14-Linux-x86_64.sh"
+ARG EMAN2_DEPENDENCY="eman-deps-dev=22.1"
 
 ###############################################################################
 
@@ -46,6 +51,9 @@ RUN yum update -y && \
             libjpeg-turbo-devel \
             mesa-libGL-devel \
             mesa-libGLU-devel
+# Node.js install for jupyter lab extension
+RUN curl -sL https://rpm.nodesource.com/setup_12.x | bash - && \
+    yum install -y nodejs
 
 # SSH configuration
 RUN sed -i "s/^.*PasswordAuthentication.*$/PasswordAuthentication no/" /etc/ssh/sshd_config && \
@@ -92,6 +100,26 @@ RUN mkdir Gctf && cd Gctf && \
     wget ${GCTF_LIB_URL} && \
     chmod +x * && \
     echo 'export PATH=${HOME}/softwares/Gctf:$PATH'
+
+# EMAN2 install
+WORKDIR /home/${USER_NAME}
+RUN wget -q "https://repo.continuum.io/miniconda/${EMAN2_MINICONDA}" && \
+    bash ./${EMAN2_MINICONDA} -b && \
+    source miniconda3/etc/profile.d/conda.sh && \
+    conda init bash && \
+    conda config --set auto_activate_base False && \
+    conda config --set auto_update_conda False && \
+    conda create -y -n eman2 ${EMAN2_DEPENDENCY} -c cryoem -c defaults -c conda-forge && \
+    conda activate eman2 && \
+    conda install -y flake8 jupyterlab && \
+    git clone https://github.com/cryoem/eman2.git && \
+    cd eman2 && mkdir build && cd build && \
+    cmake .. -DENABLE_OPTIMIZE_MACHINE=ON && \
+    make -j && make install && make test
+WORKDIR /home/${USER_NAME}
+# Create script for running jupyterlab server
+RUN echo "nohup jupyter-lab --ip=0.0.0.0 --no-browser --notebook-dir='/' --port 8888 &> .jupyterlab_eman2_log.txt < /dev/null &" > run_jupyterlab_eman2.sh $$ \
+    chmod +x run_jupyterlab_eman2
 
 # Auto start sshd (port 22)
 USER root
