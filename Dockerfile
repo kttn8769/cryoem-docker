@@ -112,6 +112,7 @@ RUN wget -q "https://repo.continuum.io/miniconda/${EMAN2_MINICONDA}" && \
     conda create -y -n eman2 ${EMAN2_DEPENDENCY} -c cryoem -c defaults -c conda-forge && \
     conda activate eman2 && \
     conda install -y flake8 jupyterlab && \
+    # jupyter labextension install jupyterlab_vim && \
     git clone https://github.com/cryoem/eman2.git && \
     cd eman2 && mkdir build && cd build && \
     cmake .. -DENABLE_OPTIMIZE_MACHINE=ON && \
