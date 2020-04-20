@@ -118,7 +118,7 @@ RUN wget -q "https://repo.continuum.io/miniconda/${EMAN2_MINICONDA}" && \
     make -j && make install && make test
 WORKDIR /home/${USER_NAME}
 # Create script for running jupyterlab server
-RUN echo "nohup jupyter-lab --ip=0.0.0.0 --no-browser --notebook-dir='/' --port 8888 &> .jupyterlab_eman2_log.txt < /dev/null &" > run_jupyterlab_eman2.sh $$ \
+RUN echo "nohup jupyter-lab --ip=0.0.0.0 --no-browser --notebook-dir='/' --port 8888 &> .jupyterlab_eman2_log.txt < /dev/null &" > run_jupyterlab_eman2.sh && \
     chmod +x run_jupyterlab_eman2
 
 # Auto start sshd (port 22)
