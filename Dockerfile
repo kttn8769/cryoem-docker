@@ -50,7 +50,9 @@ RUN yum update -y && \
             vim \
             libjpeg-turbo-devel \
             mesa-libGL-devel \
-            mesa-libGLU-devel
+            mesa-libGLU-devel && \
+    # Below only for Japan locale
+    # localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
 # Node.js install for jupyter lab extension
 RUN curl -sL https://rpm.nodesource.com/setup_12.x | bash - && \
     yum install -y nodejs
